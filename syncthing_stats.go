@@ -77,6 +77,7 @@ type DeviceStatItem struct {
 
 type Devices map[string]DeviceStatItem
 
+var server = flag.String("server", "http://localhost:8384", "Syncthing API URL")
 var apiKeyFlag = flag.String("apikey", "", "Syncthing API key")
 var useFullReportFlag = flag.Bool("use-full-report", false, "Add extra stats from svc/report. Somewhat slow/heavy.")
 
@@ -84,7 +85,7 @@ func makeRequest(apiKey string, url string) (*http.Response, error) {
 	client := &http.Client{
 		Timeout: 2 * time.Second,
 	}
-	req, err := http.NewRequest("GET", fmt.Sprintf("http://localhost:8384/%s", url), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", *server, url), nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create HTTP request: %s", err)
 	}
